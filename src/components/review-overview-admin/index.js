@@ -1,38 +1,43 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
+import { Dancing_Script, Playfair_Display, Nunito } from "next/font/google";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
-export default function ReviewOverviewAdmin({ reviewList }) {
+const dancingScript = Dancing_Script({ subsets: ["latin"], weight: ["400", "700"] });
+const playfairDisplay = Playfair_Display({ subsets: ["latin"], weight: ["400", "700"] });
+const nunito = Nunito({ subsets: ["latin"], weight: ["300", "600"] });
+
+export default function Reviews({ reviewList }) {
+  const [reviews, setReviews] = useState([]);
+  const [current, setCurrent] = useState(0);
   const router = useRouter();
-  const [reviews, setReviews] = useState(reviewList);
 
   useEffect(() => {
-    router.refresh();
+    setReviews(reviewList);
   }, [router]);
+
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
+  };
 
   async function toggleApproval(reviewId, currentStatus) {
     try {
-      const response = await fetch("/api/approve-review", { // Use relative path
-        method: "PATCH", // Change to PATCH for updates
+      const response = await fetch("/api/approve-review", {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ reviewId, approved: !currentStatus }),
       });
-  
+
       const result = await response.json();
-      console.log("API Response:", result); // Debugging
-  
       if (result.success) {
         setReviews((prevReviews) =>
           prevReviews.map((review) =>
@@ -47,33 +52,96 @@ export default function ReviewOverviewAdmin({ reviewList }) {
       alert("Something went wrong! Please try again.");
     }
   }
-  
+
   return (
-    <div className="min-h-screen p-6 flex flex-col gap-10 bg-gray-100">
-      <div className="grid mr-9 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6 gap-9">
-        {reviews && reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <Card key={index} className="pt-5 px-3">
-              <CardContent>
-                <CardHeader>
-                  <CardTitle className="mb-5">User: {review?.user}</CardTitle>
-                  <CardDescription className="mb-5">Review: {review?.reviewText}</CardDescription>
-                  <CardTitle className="mb-5">Rating: {review?.rating} ⭐</CardTitle>
-                </CardHeader>
-                <div className="flex px-7 mt-6 gap-9 items-center">
-                  <Button
-                    onClick={() => toggleApproval(review._id, review.approved)}
-                    variant={review.approved ? "destructive" : "success"}
+    <div className="relative w-screen h-screen flex flex-col items-center justify-center overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/img/review.jpg')",
+          backgroundAttachment: "fixed",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-75 z-20"></div>
+      </div>
+
+      {/* Blur Overlay */}
+
+
+      {/* Content */}
+      <div className="relative flex flex-col items-center w-full h-full justify-center px-6 z-50">
+        {/* Heading */}
+        <div className="py-4 px-8 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl border border-white/50 mb-16">
+          <h2
+            className={`text-3xl md:text-5xl text-[#F4E3D7] text-center ${dancingScript.className} drop-shadow-lg`}
+          >
+            From Our Customers
+          </h2>
+        </div>
+
+        {/* Review Cards */}
+        <div className="relative w-full max-w-4xl flex justify-center items-center">
+          {/* Left Arrow */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 p-3 bg-[#B87534] hover:bg-[#C47F39] text-amber-100 rounded-full z-20 transition-transform active:scale-90"
+          >
+            <FaArrowLeft size={20} />
+          </button>
+
+          <div className="flex overflow-hidden w-full justify-center">
+            {reviews.length > 0 &&
+              reviews.map((review, index) => (
+                <motion.div
+                  key={review._id}
+                  className="absolute w-64 md:w-80 h-auto p-6 bg-white shadow-lg rounded-xl transition-transform flex flex-col justify-center items-center"
+                  animate={{
+                    x: `${(index - current) * 280}px`,
+                    scale: index === current ? 1.1 : 0.9,
+                    opacity: index === current ? 1 : 0.5,
+                  }}
+
+                  onClick={() => setCurrent(index)}
+                >
+                  <h3
+                    className={`text-xl font-bold mb-2 text-center text-[#4c2b08] ${playfairDisplay.className}`}
                   >
-                    {review.approved ? "Approved ✅" : "Not Approved ❌"}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <Label className="text-6xl font-extrabold">No Reviews Found!</Label>
-        )}
+                    {review.user}
+                  </h3>
+                  <p className={`text-[#7a573b] text-center leading-relaxed ${nunito.className}`}>
+                    {review.reviewText}
+                  </p>
+                  <div className="flex mt-4">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={`text-xl ${i < review.rating ? "text-[#4c2b08]" : "text-gray-300"}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex px-7 mt-6 gap-9 items-center">
+                    <Button
+                      onClick={() => toggleApproval(review._id, review.approved)}
+                      variant={review.approved ? "failure" : "pass"}
+                    >
+                      {review.approved ? "Approved" : "Not Approved"}
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 p-3 bg-[#da892cd6] text-amber-100 rounded-full z-20"
+          >
+            <FaArrowRight size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );

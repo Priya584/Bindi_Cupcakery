@@ -8,8 +8,9 @@ export default function SignInPage() {
         backgroundImage: "url('/image.jpg')",
       }}
     >
-      {/* Sign-In Box */}
-      <div className="ml-28">
+      <div className="absolute inset-0 bg-black opacity-60"></div>
+
+      <div className="relative ml-28">
         <SignIn />
       </div>
     </div>

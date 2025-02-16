@@ -1,15 +1,19 @@
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import Dashboard from "./dashboard/page";
-import AdminPage from "./admin-dashboard/page";
+import Header from "../components/header";
+import Hero from "../components/hero";
+import Features from "../components/features";
+import Contact from "../components/contact";
+import BackgroundCarousel from "../components/background-carousel";
 
-async function Home() {
-  
-    return (
-      <Dashboard />
-    );
-  
-
+export default function Home() {
+  return (
+    <main className="min-h-screen relative bg-darkBrown">
+      <BackgroundCarousel />
+      <div className="relative z-10 pt-20">
+     
+        <Hero />
+        <Features />
+        <Contact />
+      </div>
+    </main>
+  );
 }
-
-export default Home;

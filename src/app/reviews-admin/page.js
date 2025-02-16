@@ -29,9 +29,7 @@ export default async function ReviewPageAdmin() {
   const reviewList = await fetchListOfReviews();
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-black mb-6">Review Admin</h1>
       <ReviewOverviewAdmin reviewList={reviewList}/>
-    </div>
+   
   );
 }

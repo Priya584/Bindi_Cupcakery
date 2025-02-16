@@ -21,11 +21,13 @@ export default function AddToCardButton({ productItem }) {
   return (
     <button
       onClick={handleCartToggle}
-      className={`px-4 py-2 ${
-        isInCart ? "bg-red-500" : "bg-blue-500"
+      className={`bg-[#C99E63] text-[#3D2C20] px-3 py-1 rounded-lg shadow-md text-sm hover:bg-[#3a2720] hover:text-[#C99E63]
       } text-white font-bold`}
     >
-      {isInCart ? "Remove from Cart" : "Add to Cart"}
+      {isInCart ? "Remove" : "Add"}
     </button>
+  //   <button className="bg-[#C99E63] text-[#3D2C20] px-3 py-1 rounded-lg shadow-md text-sm hover:bg-[#3a2720] hover:text-[#C99E63]">
+  //   Add to Cart
+  // </button>
   );
 }
