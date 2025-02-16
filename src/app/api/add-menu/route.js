@@ -4,51 +4,45 @@ import Joi from "joi";
 import { NextResponse } from "next/server";
 
 const AddNewMenu = Joi.object({
-    Category : Joi.string().required(),
-    Item : Joi.string().required(),
-    Price : Joi.number().required(),
-    Description : Joi.string().required()
-})
+    Category: Joi.string().required(),
+    Item: Joi.string().required(),
+    Price: Joi.number().required(),
+    Description: Joi.string().required(),
+    Pic: Joi.string().required() // URL is now required
+});
 
-
-
-
-export async function POST(req){
+export async function POST(req) {
     try {
         await connectToDB();
         const extractMenuData = await req.json();
-        const {Category,Item,Price , Description} = extractMenuData;
-         
-        const {error} = AddNewMenu.validate({
-            Category,Item,Price , Description
-        })
+        const { Category, Item, Price, Description, Pic } = extractMenuData;
+
+        const { error } = AddNewMenu.validate({ Category, Item, Price, Description, Pic });
 
         if (error) {
             return NextResponse.json({
-                success : false,
-                message : error.details[0].message
-            })
+                success: false,
+                message: error.details[0].message
+            });
         }
-       
-            const newlyCreateMenuItem = await Menu.create(extractMenuData);
-            if (newlyCreateMenuItem) {
-                return NextResponse.json({
-                    success : true,
-                    message : "Menu added successfully"
-                })
-            }else{
-                return NextResponse.json({
-                    success : false,
-                    message : "Something went wrong..."
-                })
-            }
-        
 
-    }catch (error) {
+        const newlyCreateMenuItem = await Menu.create(extractMenuData);
+        if (newlyCreateMenuItem) {
+            return NextResponse.json({
+                success: true,
+                message: "Menu added successfully"
+            });
+        } else {
+            return NextResponse.json({
+                success: false,
+                message: "Something went wrong..."
+            });
+        }
+    } catch (error) {
         console.log(error);
         return NextResponse.json({
-            success : false,
-            message : "Something went wrong ! Please try again"
-        } )
+            success: false,
+            message: "Something went wrong! Please try again"
+        });
     }
 }

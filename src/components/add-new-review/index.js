@@ -16,7 +16,9 @@ export const AddNewReview = ({ openReviewDialog, setOpenReviewDialog, loading, r
     return (
         <Fragment>
             <div>
-                <Button onClick={() => setOpenReviewDialog(true)}>Add Review</Button>
+                <Button onClick={() => setOpenReviewDialog(true)} className="mb-6 px-6 py-2 bg-[#B87534] text-white rounded-lg shadow-lg hover:bg-[#A1642A]">
+                    Add Review
+                </Button>
             </div>
 
             <Dialog open={openReviewDialog} onOpenChange={() => {
@@ -67,7 +69,14 @@ export const AddNewReview = ({ openReviewDialog, setOpenReviewDialog, loading, r
                                 type="number"
                                 placeholder="Enter rating (1-5)"
                                 value={reviewFormData?.rating || ""}
-                                onChange={(e) => setReviewFormData({ ...reviewFormData, rating: e.target.value })}
+                                min="1"
+                                max="5"
+                                onInput={(e) => {
+                                    let value = parseInt(e.target.value, 10);
+                                    if (value < 1) value = 1;
+                                    if (value > 5) value = 5;
+                                    setReviewFormData({ ...reviewFormData, rating: value });
+                                }}
                                 id="rating"
                                 className="col-span-3"
                             />

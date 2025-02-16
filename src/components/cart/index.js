@@ -4,6 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { removeFromCart } from "@/store/slices/cart-slice";
 import { Button } from "../ui/button";
+import { Dancing_Script, Playfair_Display, Nunito } from "next/font/google";
+
+
+const dancingScript = Dancing_Script({ subsets: ["latin"], weight: ["400", "700"] });
+const playfairDisplay = Playfair_Display({ subsets: ["latin"], weight: ["400", "700"] });
+const nunito = Nunito({ subsets: ["latin"], weight: ["300", "600"] });
 
 export default function CartPage() {
     const [totalAmount, setTotalAmount] = useState(0);
@@ -24,15 +30,15 @@ export default function CartPage() {
             alert("Cart is empty!");
             return;
         }
-    
+
         setLoading(true);
-    
+
         const orderDetails = cart.cartItems.map(item => ({
             title: item.Item,
             price: item.Price
         }));
         const upiId = "priyabhanderi2@okaxis";
-    
+
         try {
             // Generate QR Code
             const qrResponse = await fetch("/api/generate-qr", {
@@ -40,87 +46,104 @@ export default function CartPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ amount: totalAmount, upiId }),
             }).then(res => res.json());
-    
+
             // Send Order & QR via WhatsApp
             await fetch("/api/send-whatsapp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ orderDetails, qrCode: qrResponse.qrCode }),
             });
-    
+
             alert("Order sent to business owner!");
         } catch (error) {
             console.error("Error processing order:", error);
             alert("Failed to place order. Try again!");
         }
-    
+
         setLoading(false);
     };
-    
+
 
     if (!cart.cartItems.length) {
-        return <h1 className="text-4xl font-bold p-10">Cart is empty</h1>;
+        return (
+            <div
+                className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center px-4 backdrop-blur-lg "
+                style={{
+                    backgroundImage: "url('/img/emptycartfinal.png')",
+                    backgroundAttachment: "fixed",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                }}
+            >
+            </div>
+        );
     }
 
     return (
-        <div className="bg-white py-4">
-            <div className="max-w-7xl mx-auto">
-                <h2 className="text-3xl font-extrabold text-[#333]"> Cart</h2>
-                <div className="overflow-y-auto ">
-                    <table className="mt-12 w-full border-collapse divide-y">
-                        <thead className="whitespace-nowrap text-left">
-                            <tr>
-                            <th className="text-base text-gray-700 p-4">Category</th>
-                                <th className="text-base text-gray-700 p-4">Item</th>
-                                <th>Price</th>
-                                <th>Remove</th>
+        <div
+            className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center px-4 backdrop-blur-lg"
+            style={{ backgroundImage: "url('/img/ucart3.jpg')" }}
+        >
+            <div className="relative py-4 px-8 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl border border-white/50 mt-28 mb-14">
+                <h2 className={`text-3xl md:text-5xl text-[#D2B48C] text-center drop-shadow-lg ${dancingScript.className}`}>My Cart</h2>
+            </div>
+
+            <div className="bg-[#3E2723] bg-opacity-90 p-8 rounded-xl shadow-2xl text-white w-full max-w-3xl border border-[#D2B48C]">
+                {cart?.cartItems.length > 0 ? (
+                    <table className="w-full text-center border-collapse">
+                        <thead>
+                            <tr className="text-[#D2B48C] border-b border-[#D2B48C] text-lg">
+                                <th className="p-3">Sr. No</th>
+                                <th className="p-3">Category</th>
+                                <th className="p-3">Item</th>
+                                <th className="p-3">Price</th>
+                                <th className="p-3">Action</th>
                             </tr>
                         </thead>
-                        <tbody className="whitespace-nowrap text-left divide-y">
-                            {cart?.cartItems.map(item => (
-                                <tr key={item._id}>
-                                    <td className="py-5 px-4">
-                                        <div className="flex items-center gap-6 w-max">
-                                            
-                                            <div>
-                                                <p className="text-lg font-bold text-black">{item?.Category}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-5 px-4">
-                                        <div className="flex items-center gap-6 w-max">
-                                            
-                                            <div>
-                                                <p className="text-lg font-bold text-black">{item?.Item}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-5 px-4">
-                                        <p className="font-semibold">{item?.Price} ₹</p>
-                                    </td>
-                                    <td className="py-5 px-4">
-                                    <Button onClick={() => handleRemoveFromCart(item?._id)}>Remove</Button>
+                        <tbody>
+                            {cart.cartItems.map((item, index) => (
+                                <tr key={item._id} className="text-[#ede6d9] border-b border-gray-600">
+                                    <td className="p-3">{index + 1}</td>
+                                    <td className="p-3">{item.Category}</td>
+                                    <td className="p-3">{item.Item}</td>
+                                    <td className="p-3 text-lg">{item.Price} ₹</td>
+                                    <td className="p-3">
+                                        <Button
+                                            onClick={() => handleRemoveFromCart(item._id)}
+                                            className="bg-[#A05135] text-[#ede6d9] px-3 py-1 rounded hover:bg-[#ede6d9] hover:text-[#a05135]"
+                                        >
+                                            Remove
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td className="py-7 px-4">
-                                    <p className="text-xl font-bold">Total: <span>{totalAmount} ₹</span></p>
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
+                ) : (
+                    <p className="text-center text-xl">Your cart is empty</p>
+                )}
+
+                <div className="mt-5 text-lg font-semibold text-right">
+                    Total: <span className="text-[#B9986C]">{totalAmount} ₹</span>
                 </div>
                 <button
                     onClick={handleOrder}
                     disabled={loading}
-                    className="bg-blue-500 text-white px-4 py-2 mt-4"
+                    className="mt-5 w-full bg-[#D2B48C] text-[#3E2723] hover:bg-[#B9986C] border-[#3E2723] border-4 text-lg py-2 rounded-lg"
                 >
                     {loading ? "Processing..." : "Place Order & Pay"}
                 </button>
+
+                <div className="flex flex-col md:flex-row items-center justify-between bg-[#ede6d9] p-6 mt-10 rounded-xl shadow-lg border border-[#D2B48C] w-full max-w-3xl">
+                    <div className="flex-1 flex justify-center md:justify-start">
+                        <img src="/img/qr.jpg" alt="WhatsApp QR" className="w-48 h-48 rounded-md shadow-lg" />
+                    </div>
+                    <div className="flex-1">
+                        <p className="text-[#3E2723] text-center md:text-left">
+                            Scan QR and send the message on WhatsApp to receive confirmation of your order.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );
