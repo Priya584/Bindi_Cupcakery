@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server"
 
 async function fetchListOfMenuItems() {
   try {
-    const apiResponse = await fetch("http://localhost:3000/api/get-menu", {
+    const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get-menu`, {
       method: "GET",
       cache: "no-store"
     })

@@ -4,7 +4,7 @@ import MenuOverviewHome from "@/components/menu-overview-home"
 
 async function fetchListOfMenuItems() {
   try {
-    const apiResponse = await fetch("http://localhost:3000/api/get-menu", {
+    const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get-menu`, {
       method: "GET",
       cache: "no-store"
     })

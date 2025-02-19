@@ -14,7 +14,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Content */}
-      <p className={`mt-2 mb-2 ${playfairDisplay.className} text-center mx-auto flex flex-col sm:flex-row items-center justify-center gap-2`}>
+      <div className={`mt-2 mb-2 ${playfairDisplay.className} text-center mx-auto flex flex-col sm:flex-row items-center justify-center gap-2`}>
         <div>
           Copyright © 2024. All rights reserved.
           <span className="inline-block animate-bounce">🧁</span>
@@ -23,7 +23,7 @@ export default function Footer() {
           Designed with <span className="inline-block animate-pulse text-red-400">❤</span>
 
         </div>
-      </p>
+      </div>
     </footer>
   );
 }
