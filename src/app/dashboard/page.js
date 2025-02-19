@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic"; // Forces server-side rendering
+
+
 import MenuHome from "../menu-home/page";
 
 

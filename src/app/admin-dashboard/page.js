@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic"; // Forces server-side rendering
+
+
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Menu from "../menu/page";
