@@ -14,7 +14,7 @@ export default function Contact() {
       <div className="container mx-auto">
         {/* Contact Us Header */}
         <div className="flex justify-center mb-5">
-          <div className="py-4 px-8 bg-white/20 backdrop-blur-xl rounded-xl shadow-xl border border-white/30">
+          <div data-aos="zoom-in" className="py-4 px-8 bg-white/20 backdrop-blur-xl rounded-xl shadow-xl border border-white/30">
             <h2 className={`text-3xl md:text-4xl text-[#FED8A6] text-center ${dancingScript.className}`}>
               Contact Us
             </h2>

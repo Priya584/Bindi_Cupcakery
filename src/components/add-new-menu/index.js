@@ -16,7 +16,7 @@ export const AddNewMenu = ({ openMenuDialog, setOpenMenuDialog, loading, MenuFor
     return (
         <Fragment>
             <div>
-                <Button onClick={() => { setOpenMenuDialog(true) }} className="bg-[#b39977] text-[#24160e] border-[#24160e]  hover:bg-[#d4c3a5] hover:text-[#000000] w-full mb-4">Add New Item</Button>
+                <Button onClick={() => { setOpenMenuDialog(true) }} className="bg-[#e2d4c2] text-[#24160e] border-[#24160e]  hover:bg-[#d4c3a5] hover:text-[#000000] w-full mb-4">Add New Item</Button>
             </div>
 
             <Dialog open={openMenuDialog} onOpenChange={() => {

@@ -4,7 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { removeFromCart } from "@/store/slices/cart-slice";
 import { Button } from "../ui/button";
+import Image from 'next/image';
 import { Dancing_Script, Playfair_Display, Nunito } from "next/font/google";
+import { Typewriter } from "react-simple-typewriter";
+import { Prata, Poppins } from "next/font/google";
+
+// Load fonts
+const prata = Prata({ subsets: ["latin"], weight: "400" });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "600"] });
 
 
 const dancingScript = Dancing_Script({ subsets: ["latin"], weight: ["400", "700"] });
@@ -72,23 +79,44 @@ export default function CartPage() {
                     backgroundImage: "url('/img/emptycartfinal.png')",
                     backgroundAttachment: "fixed",
                     backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundPosition: "left",
                 }}
             >
+                <h1 className={`text-4xl md:text-6xl lg:text-7xl mb-8 mt-[-40px] relative ${prata.className}`} style={{ color: "#f5f5dc" }}>
+                        <Typewriter
+                          words={["Your Cart is Empty😒!"]}
+                          loop={1}
+                          cursor
+                          typeSpeed={100}
+                          deleteSpeed={50}
+                        />
+                      </h1>
             </div>
         );
     }
 
     return (
         <div
-            className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center px-4 backdrop-blur-lg"
-            style={{ backgroundImage: "url('/img/ucart3.jpg')" }}
+            className="relative min-h-screen flex flex-col items-center justify-center"
         >
+            {/* <div className="absolute inset-0 w-full h-full bg-fixed bg-cover bg-center backdrop:blur-lg" style={{ backgroundImage: "url('/img/ucart3.jpg')" }}>
+
+            </div> */}
+            <div className="fixed inset-0 -z-10">
+                    <Image
+                      src="/img/ucart3.jpg"
+                      alt="Background"
+                      layout="fill"
+                      objectFit="cover"
+                      className="backdrop:blur-lg"
+                    />
+                  </div>
+
             <div className="relative py-4 px-8 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl border border-white/50 mt-28 mb-14">
                 <h2 className={`text-3xl md:text-5xl text-[#D2B48C] text-center drop-shadow-lg ${dancingScript.className}`}>My Cart</h2>
             </div>
 
-            <div className="bg-[#3E2723] bg-opacity-90 p-8 rounded-xl shadow-2xl text-white w-full max-w-3xl border border-[#D2B48C]">
+            <div className="bg-[#3E2723] bg-opacity-90 p-8 rounded-xl shadow-2xl text-white overflow-auto w-full sm:max-w-3xl border border-[#D2B48C] z-30">
                 {cart?.cartItems.length > 0 ? (
                     <table className="w-full text-center border-collapse">
                         <thead>
@@ -105,7 +133,21 @@ export default function CartPage() {
                                 <tr key={item._id} className="text-[#ede6d9] border-b border-gray-600">
                                     <td className="p-3">{index + 1}</td>
                                     <td className="p-3">{item.Category}</td>
-                                    <td className="p-3">{item.Item}</td>
+                                    <td className="p-3">
+                                        {item.Item && typeof item.Item === "object" && Object.keys(item.Item).length > 0 ? (
+                                            <>
+                                                {item.Item.desserts && (
+                                                    <div><strong>Desserts:</strong> {item.Item.desserts.join(", ") || "None"}</div>
+                                                )}
+                                                {item.Item.dips && (
+                                                    <div><strong>Dips:</strong> {item.Item.dips.join(", ") || "None"}</div>
+                                                )}
+                                            </>
+                                        ) : (
+                                            item.Item // Directly show `item.Item` if it doesn’t have `desserts` or `dips`
+                                        )}
+                                    </td>
+
                                     <td className="p-3 text-lg">{item.Price} ₹</td>
                                     <td className="p-3">
                                         <Button
@@ -134,7 +176,7 @@ export default function CartPage() {
                     {loading ? "Processing..." : "Place Order & Pay"}
                 </button>
 
-                <div className="flex flex-col md:flex-row items-center justify-between bg-[#ede6d9] p-6 mt-10 rounded-xl shadow-lg border border-[#D2B48C] w-full max-w-3xl">
+                <div className="flex flex-col space-y-9 md:flex-row items-center justify-between bg-[#ede6d9] p-6 mt-10 rounded-xl shadow-lg border border-[#D2B48C] w-full max-w-3xl">
                     <div className="flex-1 flex justify-center md:justify-start">
                         <img src="/img/qr.jpg" alt="WhatsApp QR" className="w-48 h-48 rounded-md shadow-lg" />
                     </div>

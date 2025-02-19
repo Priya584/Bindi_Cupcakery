@@ -137,7 +137,7 @@ export default function ReviewsOverviewHome() {
                     </div>
                     <button
                         onClick={nextSlide}
-                        className="absolute right-0 p-3 bg-[#da892cd6] text-amber-100 rounded-full z-20"
+                        className="absolute right-0 p-3 bg-[#B87534] hover:bg-[#C47F39] text-amber-100 rounded-full z-20 transition-transform active:scale-90"
                     >
                         <FaArrowRight size={20} />
                     </button>

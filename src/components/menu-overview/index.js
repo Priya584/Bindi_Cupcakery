@@ -10,6 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
@@ -114,13 +123,16 @@ export default function MenuOverview({ menuList }) {
   return (
     <div className={`relative min-h-screen flex flex-col items-center text-white ${nunito.className}`}>
       {/* Category Bar */}
-      <Image
-        src="/img/menuu.jpg"
-        alt="Background"
-        layout="fill"
-        objectFit="cover"
-        className="absolute inset-0 blur-md"
-      />
+      <div className="fixed inset-0 -z-10">
+        <Image
+          src="/img/menuu.jpg"
+          alt="Background"
+          layout="fill"
+          objectFit="cover"
+          className="blur-md"
+        />
+      </div>
+
       <div className="relative z-10 w-full max-w-4xl p-6 mt-20">
         <div className="flex justify-center mb-6">
           <div className="py-4 px-8 bg-white/20 backdrop-blur-xl rounded-xl shadow-xl border border-white/30">
@@ -133,41 +145,48 @@ export default function MenuOverview({ menuList }) {
 
 
 
-        <div className="flex items-center gap-4 rounded-lg shadow mb-4">
-          {categories.map((category, index) => (
-            <Button
-              key={index}
-              variant={selectedCategory === category ? "default" : "outline"}
-              onClick={() => setSelectedCategory(category)}
-              className={
-                category === selectedCategory
-                  ? "bg-[#ede6d9] text-[#24160e] border-[#24160e] hover:bg-[#d4c3a5] hover:text-[#000000]"
-                  : "bg-[#24160e] text-[#ede6d9] hover:bg-[#3b2a1f] hover:text-[#ffffff]"
-              }
-            >
-              {category}
-            </Button>
-          ))}
+        <div className="flex items-center justify-end gap-4  rounded-lg shadow mb-4 p-2 max-w-full">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="bg-[#ede6d9] text-[#24160e] hover:bg-[#d4c3a5] border-[#24160e] flex-shrink-0">Open</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="flex items-center justify-center flex-col w-56 space-y-2">
+              <DropdownMenuLabel className="text-center">Categories</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+
+              {categories.map((category, index) => (
+                <button
+                  key={index}
+                  className="w-full"
+                  onClick={() => setSelectedCategory(category)}
+                  
+                >
+                  <DropdownMenuItem>{category}</DropdownMenuItem>
+                </button>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Input to Add New Category */}
           <Input
             placeholder="New Category"
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
-            className={`px-2 py-1 rounded bg-[#000000] text-[#ffffff] ${nunito.className}`}
+            className="px-2 py-1 rounded bg-[#000000] text-[#ffffff] flex-shrink-0 w-40"
           />
           <Button
-            className="bg-[#ede6d9] text-[#24160e] hover:bg-[#d4c3a5] border-[#24160e]"
+            className="bg-[#ede6d9] text-[#24160e] hover:bg-[#d4c3a5] border-[#24160e] flex-shrink-0"
             onClick={() => {
               if (newCategory && !categories.includes(newCategory)) {
-                setSelectedCategory(newCategory)
-                setNewCategory("")
+                setSelectedCategory(newCategory);
+                setNewCategory("");
               }
             }}
           >
             Add
           </Button>
         </div>
+
 
         {/* Show "Add New Item" button only if a category is selected */}
         {selectedCategory && (
@@ -189,7 +208,7 @@ export default function MenuOverview({ menuList }) {
         {/* Show Table only if there are items */}
         {filteredMenu.length > 0 ? (
           <Table className="bg-[#3D2B1F] text-white w-full rounded-md overflow-hidden">
-            <TableHeader className={`bg-[#24160e] text-[#ede6d9] hover:bg-[#3b2a1f] hover:text-[#ffffff] ${playfairDisplay.className}`}>
+            <TableHeader className={`bg-[#24160e] hover:bg-[#24160e] text-[#ede6d9] hover:text-[#ede6d9] ${playfairDisplay.className}`}>
               <TableRow>
                 <TableHead className="p-3 text-[#D2B48C] text-center">Sr. No.</TableHead>
                 <TableHead className="text-[#D2B48C] text-center">Category</TableHead>
@@ -201,7 +220,7 @@ export default function MenuOverview({ menuList }) {
             </TableHeader>
             <TableBody className={nunito.className}>
               {filteredMenu.map((item, index) => (
-                <TableRow key={item._id} className="border-b border-[#D2B48C] bg-[#cbb799] text-[#3d211a]">
+                <TableRow key={item._id} className="border-b border-[#D2B48C] bg-[#e1d0b7] hover:bg-[#cbb799] text-[#3d211a]">
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell className="text-center">{item.Category}</TableCell>
                   <TableCell className="text-center">{item.Item}</TableCell>
@@ -224,8 +243,8 @@ export default function MenuOverview({ menuList }) {
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    <Button className="bg-[#24160e] text-[#ede6d9] hover:bg-[#3b2a1f] hover:text-[#ffffff] mr-2" onClick={() => handleUpdateByMenuId(item)}>Edit</Button>
-                    <Button className="bg-[#a05135] text-white" onClick={() => handleDeleteByMenuId(item._id)}>Delete</Button>
+                    <Button className="bg-[#24160e] text-[#ede6d9] hover:bg-[#3b2a1f] hover:text-[#ffffff] mr-2 hover:scale-105" onClick={() => handleUpdateByMenuId(item)}>Edit</Button>
+                    <Button className="bg-[#a05135] text-white hover:bg-[#a05135] hover:scale-105" onClick={() => handleDeleteByMenuId(item._id)}>Delete</Button>
                   </TableCell>
                 </TableRow>
               ))}

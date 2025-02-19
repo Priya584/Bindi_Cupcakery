@@ -74,7 +74,7 @@ export default function Reviews({ reviewList }) {
       {/* Content */}
       <div className="relative flex flex-col items-center w-full h-full justify-center px-6 z-50">
         {/* Heading */}
-        <div className="py-4 px-8 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl border border-white/50 mb-16">
+        <div data-aos="zoom-out" className="py-4 px-8 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl border border-white/50 mb-16">
           <h2
             className={`text-3xl md:text-5xl text-[#F4E3D7] text-center ${dancingScript.className} drop-shadow-lg`}
           >
@@ -137,7 +137,7 @@ export default function Reviews({ reviewList }) {
           {/* Right Arrow */}
           <button
             onClick={nextSlide}
-            className="absolute right-0 p-3 bg-[#da892cd6] text-amber-100 rounded-full z-20"
+            className="absolute right-0 p-3 bg-[#B87534] hover:bg-[#C47F39] text-amber-100 rounded-full z-20 transition-transform active:scale-90"
           >
             <FaArrowRight size={20} />
           </button>
