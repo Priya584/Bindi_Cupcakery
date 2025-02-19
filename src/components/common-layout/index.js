@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import Header from "../header";
 import ReduxProvider from "@/provider";
+import Footer from "../footer";
 
 
 async function CommonLayout({children}) {
@@ -11,6 +12,7 @@ async function CommonLayout({children}) {
         <main>
             <ReduxProvider>{children}</ReduxProvider>
         </main>
+        <Footer/>
     </div>
 }
 
