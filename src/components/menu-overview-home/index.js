@@ -33,7 +33,7 @@ export default function MenuOverviewHome({ menuList }) {
         </h1>
       </div>
 
-      <div className="relative w-full max-w-[1050px] mx-auto py-10 mt-72 sm:mt-64 px-8 bg-[#f0e7de] rounded-lg shadow-lg z-20 
+      <div className="relative w-full max-w-[1050px] mx-auto py-10 mt-72 sm:mt-64 px-8 bg-[#f0e7de] rounded-lg shadow-lg z-20 mb-10
   lg:w-full lg:mx-[10px] 
   md:w-[90%] md:px-6 md:mx-auto
   sm:w-[95%] sm:px-4 sm:mx-auto
