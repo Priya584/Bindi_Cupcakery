@@ -4,11 +4,10 @@ import { redirect } from "next/navigation";
 
 async function fetchListOfReviews() {
   try {
-    const apiResponse = await fetch("http://localhost:3000/api/get-review", {
+    const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get-review`, {
       method: "GET",
       cache: "no-store",
     });
-
     const result = await apiResponse.json();
     return result?.data;
   } catch (error) {
